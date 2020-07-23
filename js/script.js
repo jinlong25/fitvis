@@ -12,6 +12,11 @@ fv.outerHeight = fv.outerWidth;
 fv.width = fv.outerWidth - fv.left - fv.right;
 fv.height = fv.outerHeight - fv.top - fv.bottom;
 
+//create a namespace for heart rate
+var hr = {
+
+};
+
 //create a namespace for step
 var step = {
 	'outerRadius': fv.outerWidth/2,
@@ -27,6 +32,8 @@ sleep.radius = step.innerRadius - sleep.arcWidth,
 
 //load data
 d3.json('/data/data.json').then(function(data) {
+
+	// console.log(data['2020-07-01']['heart-rate']);
 
 	//subset dates from data
 	fv.dates = Object.getOwnPropertyNames(data);
@@ -74,6 +81,7 @@ d3.json('/data/data.json').then(function(data) {
 		chart.todayExtent = todayExtent(d);
 
 		//draw things
+		drawHr(data, d, chart);
 		drawStep(data, d, chart);
 		drawSleep(data, d, chart);
 	});
@@ -90,6 +98,51 @@ function todayExtent(today) {
 		tmr.unix() * 1000
 	];
 }
+
+//-----------------------------------heart rate START
+function drawHr(data, date, chart) {
+
+	//get hr data
+	if(data[date].hasOwnProperty('heart-rate')) {
+		hr.data = data[date]['heart-rate']
+	} else {
+		hr.data = [];
+	}
+	hr.data = data[date]['heart-rate']; //##verity total step later##
+
+	//parse dt in step data
+	hr.data.forEach(function(d) {
+		d['dt-la'] = moment(d['dt-la'], 'YYYY-MM-DD HH:mm:SS');
+	});
+
+	//define x scale
+	hr.x = d3.scaleTime()
+		.domain(d3.extent(hr.data.map(d => d['dt-la'])))
+		.range([0, 2 * Math.PI]);
+
+	//define y scale
+	hr.y = d3.scaleLinear()
+		.domain([0, 150])//##hard-code max value for now
+		.range([step.innerRadius, step.outerRadius])
+
+	//define area function
+	hr.line = d3.lineRadial()
+		// .curve(d3.curveLinearClosed)
+		.curve(d3.curveLinearClosed)
+		.angle(d => hr.x(d['dt-la']));
+
+	//draw step radial area chart
+	chart.svg.append('path')
+		.attr('fill', 'none')
+		.attr('stroke', 'red')
+		.attr('stroke-width', .5)
+		.attr('d', hr.line.radius(d => hr.y(d.value))
+			(hr.data)
+		);
+
+		console.log('here');
+}
+//--------------------------------heart rate END
 
 //-----------------------------------------------------step START
 function drawStep(data, date, chart) {
