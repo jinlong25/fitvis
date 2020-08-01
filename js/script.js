@@ -56,9 +56,6 @@ d3.json('/data/data.json').then(function(data) {
 		.attr('class', 'text-center')
 		.text(d);
 
-		console.log(d);
-		console.log((moment(d).week() - 1) * 120);
-
 		//create a svg
 		chart.svg = chart.container.append('svg')
 				.attr('width', fv.width + fv.top + fv.right)
@@ -67,12 +64,12 @@ d3.json('/data/data.json').then(function(data) {
 				.attr('transform', 'translate(' + (fv.left + fv.width) / 2 + ',' + (fv.top + fv.height/2) + ')');
 
 		//create a background
-		chart.svg.append('rect')
-			.attr('width', fv.outerWidth)
-			.attr('height', fv.outerHeight)
-			.attr('x', -fv.outerWidth/2)
-			.attr('y', -fv.outerHeight/2)
-			.style('fill', '#ddd');
+		// chart.svg.append('rect')
+		// 	.attr('width', fv.outerWidth)
+		// 	.attr('height', fv.outerHeight)
+		// 	.attr('x', -fv.outerWidth/2)
+		// 	.attr('y', -fv.outerHeight/2)
+		// 	.style('fill', '#ddd');
 
 		//create a todayExtent
 		chart.todayExtent = todayExtent(d);
