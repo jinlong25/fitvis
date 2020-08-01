@@ -4,13 +4,11 @@ var fv = {
 	'right': 10,
 	'bottom': 10,
 	'left': 10,
-	'outerWidth': 200
+	'size': 190
 };
 
-fv.outerHeight = fv.outerWidth;
-
-fv.width = fv.outerWidth - fv.left - fv.right;
-fv.height = fv.outerHeight - fv.top - fv.bottom;
+fv.width = fv.size - fv.left - fv.right;
+fv.height = fv.size - fv.top - fv.bottom;
 
 //create a namespace for heart rate
 var hr = {
@@ -19,10 +17,10 @@ var hr = {
 
 //create a namespace for step
 var step = {
-	'outerRadius': fv.outerWidth/2,
+	'outerRadius': fv.size/2,
 	'areaHeight': 30
 };
-step.innerRadius = fv.outerWidth/2 - step.areaHeight;
+step.innerRadius = fv.size/2 - step.areaHeight;
 
 //create a namespace for sleep
 var sleep = {
@@ -47,8 +45,8 @@ d3.json('/data/data.json').then(function(data) {
 			.append('div')
 			.attr('class', 'container')
 			.style('position', 'absolute')
-			.style('left', moment(d).day() * 210 + 'px' )
-			.style('top', (moment(d).week() - 1) * 210 + 'px' )
+			.style('left', moment(d).day() * fv.size + 'px' )
+			.style('top', (moment(d).week() - 1) * fv.size + 'px' )
 
 		//enter title
 		chart.container
@@ -65,10 +63,10 @@ d3.json('/data/data.json').then(function(data) {
 
 		//create a background
 		// chart.svg.append('rect')
-		// 	.attr('width', fv.outerWidth)
-		// 	.attr('height', fv.outerHeight)
-		// 	.attr('x', -fv.outerWidth/2)
-		// 	.attr('y', -fv.outerHeight/2)
+		// 	.attr('width', fv.size)
+		// 	.attr('height', fv.size)
+		// 	.attr('x', -fv.size/2)
+		// 	.attr('y', -fv.size/2)
 		// 	.style('fill', '#ddd');
 
 		//create a todayExtent
