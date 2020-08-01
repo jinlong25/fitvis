@@ -42,25 +42,22 @@ d3.json('/data/data.json').then(function(data) {
 		//create a chart obj
 		var chart = {};
 
-		//create a new row for every 7 col
-		if ( i % 7 === 0 ) {
-			chart.row = d3.select('.container-fluid')
-				.append('div')
-				.attr('class', 'row');
-		} else {
-			chart.row = d3.select('.container-fluid>.row:last-child');
-		}
-
 		//create bootstrap column
-		chart.container = chart.row
+		chart.container = d3.select('.canvas')
 			.append('div')
-			.attr('class', 'col-lg-1 container top-buffer');
+			.attr('class', 'container')
+			.style('position', 'absolute')
+			.style('left', moment(d).day() * 210 + 'px' )
+			.style('top', (moment(d).week() - 1) * 210 + 'px' )
 
 		//enter title
 		chart.container
 		.append('h6')
 		.attr('class', 'text-center')
 		.text(d);
+
+		console.log(d);
+		console.log((moment(d).week() - 1) * 120);
 
 		//create a svg
 		chart.svg = chart.container.append('svg')
@@ -139,8 +136,6 @@ function drawHr(data, date, chart) {
 		.attr('d', hr.line.radius(d => hr.y(d.value))
 			(hr.data)
 		);
-
-		console.log('here');
 }
 //--------------------------------heart rate END
 

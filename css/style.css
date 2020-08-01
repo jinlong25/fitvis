@@ -2,10 +2,7 @@ body {
 	background-color: #fff;
 };
 
-div.container {
-	background-color: #fff;
-}
-
-.top-buffer {
-	margin-top:20px;
+.container {
+	position: absolute;
+	display: inline;
 }
