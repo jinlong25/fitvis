@@ -4,11 +4,11 @@ var fv = {
 	'right': 10,
 	'bottom': 10,
 	'left': 10,
-	'size': 190
+	'radius': 95
 };
 
-fv.width = fv.size - fv.left - fv.right;
-fv.height = fv.size - fv.top - fv.bottom;
+fv.width = fv.radius*2 - fv.left - fv.right;
+fv.height = fv.radius*2 - fv.top - fv.bottom;
 
 //create a namespace for heart rate
 var hr = {
@@ -17,10 +17,10 @@ var hr = {
 
 //create a namespace for step
 var step = {
-	'outerRadius': fv.size/2,
-	'areaHeight': 30
+	'outerRadius': fv.radius,
+	'areaHeight': 50
 };
-step.innerRadius = fv.size/2 - step.areaHeight;
+step.innerRadius = fv.radius - step.areaHeight;
 
 //create a namespace for sleep
 var sleep = {
@@ -45,8 +45,8 @@ d3.json('/data/data.json').then(function(data) {
 			.append('div')
 			.attr('class', 'container')
 			.style('position', 'absolute')
-			.style('left', moment(d).day() * fv.size + 'px' )
-			.style('top', (moment(d).week() - 1) * fv.size + 'px' )
+			.style('left', moment(d).day() * fv.radius * 2 + 'px' )
+			.style('top', (moment(d).week() - 1) * fv.radius * 2 + 'px' )
 
 		//enter title
 		chart.container
@@ -63,18 +63,18 @@ d3.json('/data/data.json').then(function(data) {
 
 		//create a background
 		// chart.svg.append('rect')
-		// 	.attr('width', fv.size)
-		// 	.attr('height', fv.size)
-		// 	.attr('x', -fv.size/2)
-		// 	.attr('y', -fv.size/2)
+		// 	.attr('width', fv.radius*2)
+		// 	.attr('height', fv.radius*2)
+		// 	.attr('x', -fv.radius)
+		// 	.attr('y', -fv.radius)
 		// 	.style('fill', '#ddd');
 
 		//create a todayExtent
 		chart.todayExtent = todayExtent(d);
 
 		//draw things
-		drawHr(data, d, chart);
 		drawStep(data, d, chart);
+		drawHr(data, d, chart);
 		drawSleep(data, d, chart);
 	});
 
@@ -114,8 +114,8 @@ function drawHr(data, date, chart) {
 
 	//define y scale
 	hr.y = d3.scaleLinear()
-		.domain([0, 150])//##hard-code max value for now
-		.range([step.innerRadius, step.outerRadius])
+		.domain([40, 150])//##hard-code max value for now
+		.range([step.innerRadius - 10, step.outerRadius])
 
 	//define area function
 	hr.line = d3.lineRadial()
@@ -157,7 +157,7 @@ function drawStep(data, date, chart) {
 
 	//define y scale
 	step.y = d3.scaleLinear()
-		.domain([0, 2000])//##hard-code max value for now
+		.domain([0, 2200])//##hard-code max value for now
 		.range([step.innerRadius, step.outerRadius])
 
 	//define area function
