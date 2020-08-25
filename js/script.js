@@ -10,6 +10,7 @@ var fv = {
 fv.width = fv.radius*2 - fv.left - fv.right;
 fv.height = fv.radius*2 - fv.top - fv.bottom;
 
+
 //create a namespace for heart rate
 var hr = {
 
@@ -160,6 +161,23 @@ function drawStep(data, date, chart) {
 		.domain([0, 2200])//##hard-code max value for now
 		.range([step.innerRadius, step.outerRadius])
 
+	//define gradient for steps
+	chart.svg.append('defs')
+		.append('radialGradient')
+		.attr('id', 'step-gradient')
+		.attr('cx', '50%')
+		.attr('cy', '50%')
+		.attr('r', '50%')
+		.selectAll('stop')
+		.data([
+			{offset: '0%', color: 'white'},
+			{offset: '60%', color: 'yellow'},
+			{offset: '100%', color: 'red'}
+		])
+		.enter().append('stop')
+		.attr('offset', function(d) { return d.offset; })
+		.attr('stop-color', function(d) { return d.color; });
+
 	//define area function
 	step.area = d3.areaRadial()
 		// .curve(d3.curveLinearClosed)
@@ -168,7 +186,8 @@ function drawStep(data, date, chart) {
 
 	//draw step radial area chart
 	chart.svg.append('path')
-		.attr('fill', '#d7191c')
+		// .attr('fill', '#d7191c')
+		.attr('fill', 'url(#step-gradient)')
 		.attr('d', step.area
 			.innerRadius(step.y(0))
 			.outerRadius(d => step.y(d.value))
