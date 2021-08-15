@@ -30,7 +30,7 @@ var sleep = {
 sleep.radius = step.innerRadius - sleep.arcWidth,
 
 //load data
-d3.json('/data/data.json').then(function(data) {
+d3.json('/data/data-test.json').then(function(data) {
 
 	// console.log(data['2020-07-01']['heart-rate']);
 
